@@ -8,15 +8,21 @@ body {
 
 h1 {
     text-align: center;
-    margin: 0 auto 30px auto;
-    padding: 15px 30px;
-    border: 2px solid #e50914; /* Netflix-Rot oder eine andere Akzentfarbe */
-    display: table;
-    border-radius: 4px;
-    color: white;
-    box-shadow: 0 0 10px rgba(229, 9, 20, 0.5); /* Leichter Leuchteffekt */
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    color: #ffffff;            /* Titel bleibt weiß */
+    display: table;            /* Kasten schmiegt sich an den Text an */
+    margin: 40px auto;         /* Zentrierung und Abstand nach oben/unten */
+    padding: 15px 35px;        /* Platz im inneren Kasten */
+    /* --- Innerer Kasten (Rot & Leuchtend) --- */
+    border: 3px solid #ff0000; 
+    border-radius: 8px;        /* Abrundung des inneren Kastens */
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.8); /* Das rote Leuchten */
+    /* --- Äußerer Kasten (Weiß) --- */
+    /* Wir nutzen 'outline' mit einem Offset, um den zweiten Kasten zu bauen */
+    outline: 2px solid #ffffff;
+    outline-offset: 12px;      /* Der Abstand zwischen dem roten und weißen Kasten */
+    /* Optional: Ein bisschen Platz schaffen, damit die Outline nicht am Rand klebt */
+    position: relative;
+    z-index: 1;
 }
 
 .section-title {
