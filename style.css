@@ -8,12 +8,15 @@ body {
 
 h1 {
     text-align: center;
-    margin: 0 auto 30px auto; /* Zentriert den Block selbst */
-    padding: 15px 30px;        /* Platz zwischen Text und Rahmen */
-    border: 2px solid white;   /* Der eigentliche Rahmen */
-    display: table;            /* Sorgt dafür, dass der Kasten nur so breit wie der Text ist */
-    border-radius: 10px;       /* Abgerundete Ecken (optional) */
-    background: rgba(255, 255, 255, 0.05); /* Dezenter Hintergrund (optional) */
+    margin: 0 auto 30px auto;
+    padding: 15px 30px;
+    border: 2px solid #e50914; /* Netflix-Rot oder eine andere Akzentfarbe */
+    display: table;
+    border-radius: 4px;
+    color: white;
+    box-shadow: 0 0 10px rgba(229, 9, 20, 0.5); /* Leichter Leuchteffekt */
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .section-title {
