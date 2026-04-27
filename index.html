@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filmposter Archiv</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <header>
+        <button id="menuButton" class="menu-button">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <a href="https://lichtburg.com" target="_blank" class="title-link">
+            <h1>Poster Archiv</h1>
+        </a>
+
+        <div class="red-banner">
+            <div class="search-container">
+                <input type="text" id="searchField" placeholder="Poster suchen..." autocomplete="off">
+                <div id="suggestions" class="suggestions-list"></div>
+            </div>
+
+            <div class="filter-bar">
+                <select id="filterGenre">
+                    <option value="">Alle Genres</option>
+                </select>
+
+                <select id="filterYear">
+                    <option value="">📅 Alle Jahre</option>
+                </select>
+
+                <button id="resetFilter">✕ Filter zurücksetzen</button>
+            </div>
+        </div>
+    </header>
+
+    <nav id="sideMenu" class="side-menu">
+        <div class="menu-header">
+            <h3>Menü</h3>
+            <button id="closeMenu" class="close-menu">&times;</button>
+        </div>
+        <ul>
+            <li><a href="#">Datenschutzerklärung</a></li>
+            <li><a href="#">Impressum</a></li>
+        </ul>
+        <div class="menu-footer">© 2026 Poster Archiv</div>
+    </nav>
+
+    <main>
+
+        <!-- Neueste Poster – wird ausgeblendet wenn Filter/Suche aktiv -->
+        <section id="latestSection" class="latest-section">
+            <h2 class="section-title">Neu im Archiv</h2>
+            <div id="latestGrid" class="latest-flex"></div>
+        </section>
+
+        <hr class="separator" id="latestSeparator">
+
+        <section>
+            <h2 class="section-title" id="allePosterTitle">Alle Filme</h2>
+            <div class="carousel-wrapper">
+                <button class="nav-arrow prev" id="posterPrev">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/back.png" alt="prev">
+                </button>
+                <div id="posterGrid" class="carousel"></div>
+                <button class="nav-arrow next" id="posterNext">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/forward.png" alt="next">
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="posterModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="modalClose">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
