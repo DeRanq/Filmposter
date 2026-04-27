@@ -20,30 +20,51 @@ const isMobile = () => window.innerWidth <= 600; //
    ============================================= */
 
 async function ladeFilterOptionen() {
-    // 1. Nur IDs von Genres holen, die auch wirklich Postern zugewiesen sind
-    const { data: usedLinks } = await supabaseClient
-        .from('poster_categories')
-        .select('category_id'); //
+    // Wir laden nur Kategorien, die eine Verknüpfung in 'poster_categories' haben
+    // Das '!inner' sorgt dafür, dass Genres ohne Poster automatisch aussortiert werden
+    const { data: genres, error: genreError } = await supabaseClient
+        .from('categories')
+        .select('id, name, poster_categories!inner(poster_id)')
+        .order('name');
 
-    const usedIds = [...new Set(usedLinks.map(link => link.category_id))];
+    if (!genreError && genres) {
+        // Falls ein Genre bei mehreren Postern vorkommt, filtern wir Duplikate in JS
+        const uniqueGenres = [];
+        const seenIds = new Set();
+        
+        genres.forEach(g => {
+            if (!seenIds.has(g.id)) {
+                uniqueGenres.push(g);
+                seenIds.add(g.id);
+            }
+        });
 
-    if (usedIds.length > 0) {
-        const { data: genres } = await supabaseClient
-            .from('categories')
-            .select('id, name')
-            .in('id', usedIds) // Nur genutzte Genres laden
-            .order('name'); //
-
-        if (genres) {
-            filterGenre.innerHTML = '<option value="">🎭 Alle Genres</option>';
-            genres.forEach(g => {
-                const opt = document.createElement('option');
-                opt.value = g.id;
-                opt.textContent = g.name;
-                filterGenre.appendChild(opt);
-            });
-        }
+        filterGenre.innerHTML = '<option value="">🎭 Alle Genres</option>';
+        uniqueGenres.forEach(g => {
+            const opt = document.createElement('option');
+            opt.value = g.id;
+            opt.textContent = g.name;
+            filterGenre.appendChild(opt);
+        });
     }
+
+    // --- Jahre laden (bleibt wie es war) ---
+    const { data: jahre } = await supabaseClient
+        .from('posters')
+        .select('release_year')
+        .order('release_year', { ascending: false });
+
+    if (jahre) {
+        const unique = [...new Set(jahre.map(p => p.release_year).filter(Boolean))];
+        filterYear.innerHTML = '<option value="">📅 Alle Jahre</option>';
+        unique.forEach(year => {
+            const opt = document.createElement('option');
+            opt.value = year;
+            opt.textContent = year;
+            filterYear.appendChild(opt);
+        });
+    }
+}
 
     // Jahre laden
     const { data: jahre } = await supabaseClient
