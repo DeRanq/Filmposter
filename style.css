@@ -8,7 +8,12 @@ body {
 
 h1 {
     text-align: center;
-    margin-bottom: 30px;
+    margin: 0 auto 30px auto; /* Zentriert den Block selbst */
+    padding: 15px 30px;        /* Platz zwischen Text und Rahmen */
+    border: 2px solid white;   /* Der eigentliche Rahmen */
+    display: table;            /* Sorgt dafür, dass der Kasten nur so breit wie der Text ist */
+    border-radius: 10px;       /* Abgerundete Ecken (optional) */
+    background: rgba(255, 255, 255, 0.05); /* Dezenter Hintergrund (optional) */
 }
 
 .section-title {
