@@ -33,7 +33,7 @@ function aktualisiereLatestSichtbarkeit() {
 }
 
 /* ================================================
-   Genres für ein Poster holen (zwei separate Abfragen)
+   Genres für ein Poster holen
    ================================================ */
 async function holeGenres(posterId) {
     try {
@@ -60,22 +60,32 @@ async function holeGenres(posterId) {
 }
 
 /* ================================================
-   Modal öffnen
+   Modal öffnen – besseres Layout
    ================================================ */
 async function openModal(poster) {
-    modalBody.innerHTML = `<p style="text-align:center; padding:20px; color:#aaa;">Lade Infos...</p>`;
+    modalBody.innerHTML = `<p class="modal-loading">Lade Infos...</p>`;
     modal.style.display = 'block';
 
     const genreText = await holeGenres(poster.id);
 
     modalBody.innerHTML = `
-        <img src="${poster.image_url}" alt="${poster.title}" style="width:100%; border-radius:12px; margin-bottom:15px;">
-        <h2 style="margin: 0 0 10px 0;">${poster.title}</h2>
-        <div style="text-align:left; background:#252525; padding:20px; border-radius:12px;">
-            <p style="margin:0 0 8px 0;"><strong>📅 Jahr:</strong> ${poster.release_year || 'Unbekannt'}</p>
-            <p style="margin:0 0 8px 0;"><strong>🎭 Genre:</strong> ${genreText}</p>
-            <hr style="border:0; border-top:1px solid #444; margin:15px 0;">
-            <p style="line-height:1.6; margin:0;"><strong>📝 Beschreibung:</strong><br>${poster.description || 'Keine Beschreibung vorhanden.'}</p>
+        <div class="modal-poster-wrap">
+            <img src="${poster.image_url}" alt="${poster.title}" class="modal-poster-img">
+        </div>
+        <h2 class="modal-title">${poster.title}</h2>
+        <div class="modal-meta">
+            <div class="modal-meta-item">
+                <span class="meta-label">📅 Jahr</span>
+                <span class="meta-value">${poster.release_year || 'Unbekannt'}</span>
+            </div>
+            <div class="modal-meta-item">
+                <span class="meta-label">🎬 Genre</span>
+                <span class="meta-value">${genreText}</span>
+            </div>
+        </div>
+        <div class="modal-desc">
+            <p class="modal-desc-label">📝 Beschreibung</p>
+            <p class="modal-desc-text">${poster.description || 'Keine Beschreibung vorhanden.'}</p>
         </div>
     `;
 }
@@ -107,7 +117,6 @@ document.getElementById('posterNext').onclick = () => posterGrid.scrollLeft += 4
    Filter-Dropdowns befüllen
    ================================================ */
 async function ladeFilterOptionen() {
-    // Nur tatsächlich verwendete Genres laden
     const { data: links } = await supabaseClient
         .from('poster_categories')
         .select('category_id');
@@ -121,7 +130,7 @@ async function ladeFilterOptionen() {
             .order('name');
 
         if (genres) {
-            filterGenre.innerHTML = '<option value="">🎭 Alle Genres</option>';
+            filterGenre.innerHTML = '<option value="">Alle Genres</option>';
             genres.forEach(g => {
                 const opt = document.createElement('option');
                 opt.value = g.id;
@@ -131,7 +140,6 @@ async function ladeFilterOptionen() {
         }
     }
 
-    // Jahre laden
     const { data: jahre } = await supabaseClient
         .from('posters')
         .select('release_year')
@@ -177,7 +185,7 @@ async function ladeNeueste() {
 }
 
 /* ================================================
-   Alle Poster laden (mit Such- & Filterlogik)
+   Alle Poster laden
    ================================================ */
 async function ladeAllePoster() {
     aktualisiereLatestSichtbarkeit();
@@ -186,7 +194,6 @@ async function ladeAllePoster() {
     const genreId     = filterGenre.value;
     const jahr        = filterYear.value;
 
-    // Genre-Filter: erst passende poster_ids holen
     let erlaubtePosterIds = null;
     if (genreId) {
         const { data: links } = await supabaseClient
@@ -197,23 +204,22 @@ async function ladeAllePoster() {
         if (links && links.length > 0) {
             erlaubtePosterIds = links.map(l => l.poster_id);
         } else {
-            posterGrid.innerHTML = '<p style="color:#888; text-align:center; padding:40px;">Keine Poster für dieses Genre gefunden.</p>';
+            posterGrid.innerHTML = '<p class="no-results">Keine Poster für dieses Genre gefunden.</p>';
             return;
         }
     }
 
     let query = supabaseClient.from('posters').select('*').order('title');
-
-    if (suchbegriff)        query = query.ilike('title', `%${suchbegriff}%`);
-    if (jahr)               query = query.eq('release_year', parseInt(jahr));
-    if (erlaubtePosterIds)  query = query.in('id', erlaubtePosterIds);
+    if (suchbegriff)       query = query.ilike('title', `%${suchbegriff}%`);
+    if (jahr)              query = query.eq('release_year', parseInt(jahr));
+    if (erlaubtePosterIds) query = query.in('id', erlaubtePosterIds);
 
     const { data, error } = await query;
 
     posterGrid.innerHTML = '';
 
     if (error || !data || data.length === 0) {
-        posterGrid.innerHTML = '<p style="color:#888; text-align:center; padding:40px;">Keine Poster gefunden.</p>';
+        posterGrid.innerHTML = '<p class="no-results">Keine Poster gefunden.</p>';
         return;
     }
 
@@ -234,7 +240,6 @@ async function ladeAllePoster() {
    ================================================ */
 searchField.addEventListener('input', async () => {
     const wert = searchField.value.trim();
-
     ladeAllePoster();
 
     if (wert.length < 2) {
