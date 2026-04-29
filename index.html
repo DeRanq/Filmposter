@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filmposter Archiv</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <header>
+        <!-- Hamburger Menü oben links -->
+        <button id="menuButton" class="menu-button">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <!-- Logo Platzhalter oben rechts -->
+        <div class="logo-placeholder">
+            <span>LOGO</span>
+        </div>
+
+        <a href="https://lichtburg.com" target="_blank" class="title-link">
+            <h1>Poster Archiv</h1>
+        </a>
+
+        <div class="red-banner">
+            <div class="search-container">
+                <input type="text" id="searchField" placeholder="Poster suchen..." autocomplete="off">
+                <div id="suggestions" class="suggestions-list"></div>
+            </div>
+
+            <div class="filter-bar">
+                <select id="filterGenre">
+                    <option value="">🎭 Alle Genres</option>
+                </select>
+
+                <select id="filterYear">
+                    <option value="">📅 Alle Jahre</option>
+                </select>
+
+                <button id="resetFilter">✕ Filter zurücksetzen</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Seitenmenü -->
+    <nav id="sideMenu" class="side-menu">
+        <div class="menu-header">
+            <h3>Menü</h3>
+            <button id="closeMenu" class="close-menu">&times;</button>
+        </div>
+        <ul>
+            <li><a href="#" id="openContact">📬 Kontakt</a></li>
+            <li><a href="#">Datenschutzerklärung</a></li>
+            <li><a href="#">Impressum</a></li>
+        </ul>
+        <div class="menu-footer">© 2026 Poster Archiv</div>
+    </nav>
+
+    <!-- Kontakt Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content contact-modal-content">
+            <span class="close-button" id="contactClose">&times;</span>
+
+            <h2 class="contact-title">📬 Kontakt</h2>
+
+            <div class="contact-section">
+                <h3 class="contact-section-title">🎬 Kinobetreiber</h3>
+                <div class="contact-card">
+                    <div class="contact-row">
+                        <span class="contact-label">Name</span>
+                        <span class="contact-value">Fuchs</span>
+                    </div>
+                    <div class="contact-row">
+                        <span class="contact-label">E-Mail</span>
+                        <a href="mailto:kino@example.com" class="contact-link">kino@example.com</a>
+                    </div>
+                    <div class="contact-row">
+                        <span class="contact-label">Telefon</span>
+                        <a href="tel:+4912345678" class="contact-link">05443 469</a>
+                    </div>
+                    <div class="contact-row">
+                        <span class="contact-label">Website</span>
+                        <a href="https://lichtburg.com" target="_blank" class="contact-link">lichtburg.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-section">
+                <h3 class="contact-section-title">💻 Website-Betreiber</h3>
+                <div class="contact-card">
+                    <div class="contact-row">
+                        <span class="contact-label">Name</span>
+                        <span class="contact-value">Flo</span>
+                    </div>
+                    <div class="contact-row">
+                        <span class="contact-label">E-Mail</span>
+                        <a href="mailto:web@example.com" class="contact-link">samflorenzreifenberg@gmail.com</a>
+                    </div>
+                    <div class="contact-row">
+                        <span class="contact-label">Telefon</span>
+                        <a href="tel:+4987654321" class="contact-link">+49 176 92185166</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <main>
+
+        <!-- Neueste Poster – wird ausgeblendet wenn Filter/Suche aktiv -->
+        <section id="latestSection" class="latest-section">
+            <h2 class="section-title">Neu im Archiv</h2>
+            <div id="latestGrid" class="latest-flex"></div>
+        </section>
+
+        <hr class="separator" id="latestSeparator">
+
+        <section>
+            <h2 class="section-title" id="allePosterTitle">Alle Poster</h2>
+            <div class="carousel-wrapper">
+                <button class="nav-arrow prev" id="posterPrev">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/back.png" alt="prev">
+                </button>
+                <div id="posterGrid" class="carousel"></div>
+                <button class="nav-arrow next" id="posterNext">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/forward.png" alt="next">
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Poster Detail Modal -->
+    <div id="posterModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="modalClose">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
